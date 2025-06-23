@@ -4,8 +4,11 @@ HOST = '0.0.0.0'  # Listen on all interfaces
 PORT = 4533       # Default rotctld port
 
 # Initial dummy azimuth and elevation values
-azimuth = 180.0
-elevation = 45.0
+realAz = 180.0
+realEl = 35.0
+
+setAz = 0
+setEl = 0
 
 def handle_command(cmd):
     global azimuth, elevation
@@ -14,8 +17,8 @@ def handle_command(cmd):
     if cmd in ('p', '+p', 'get_pos'):
         # Respond with position in format: "P azimuth elevation\n"
         # Uppercase P indicates position response
-        response = f" {azimuth:.2f}\n {elevation:.2f}"
-        print(f"Sent position: Az={azimuth:.2f}, El={elevation:.2f}")
+        response = f" {realAz:.2f}\n {realEl:.2f}"
+        print(f"Sent position: Az={realAz:.2f}, El={realEl:.2f}")
         return response.encode('ascii')
     elif cmd.startswith('set_pos') or cmd.startswith('+set_pos'):
         # Optionally handle setting position: e.g. "set_pos 123.4 56.7"
@@ -50,9 +53,14 @@ def main():
                     data = conn.recv(1024)
                     if not data:
                         break
-                    cmd = data.decode('ascii').strip()
-                    print(f"Received command: {cmd}")
+
+                    cmd = data.decode('utf-8').strip()
+                    #print(f"Received command: {cmd}")
                     resp = handle_command(cmd)
+                    if cmd.startswith("P"):
+                        setAz, setEl, = str(data.decode('utf-8').strip()[2:]).split()
+                        print("Recieved position: Az:"+ setAz +" El:" + setEl)
+
                     if resp is None:
                         print("Client requested to close connection")
                         break
