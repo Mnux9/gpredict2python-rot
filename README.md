@@ -3,7 +3,7 @@ python server which Gprecict sends AZ / EL
 
 
 
-EXAMPLE:
+EXAMPLE of the communication:
 
 
 // g predict requesting position of our rotator
