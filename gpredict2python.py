@@ -59,7 +59,7 @@ def main():
                     resp = handle_command(cmd)
                     if cmd.startswith("P"):
                         setAz, setEl, = str(data.decode('utf-8').strip()[2:]).split()
-                        print("Recieved position: Az:"+ setAz +" El:" + setEl)
+                        print("Recieved position: Az="+ setAz +" El=" + setEl)
 
                     if resp is None:
                         print("Client requested to close connection")
